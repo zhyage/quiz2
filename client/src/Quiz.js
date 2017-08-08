@@ -38,12 +38,12 @@ class Quiz extends Component {
   };
 
   onAddOption() {
-    var inputOptionStr = document.getElementById('id_addoption').value;
+    let inputOptionStr = document.getElementById('id_addoption').value;
     if (inputOptionStr.trim().length === 0) {
       alert("pleas input your option answers!");
       return;
     }
-    var optList = this.state.optionList;
+    let optList = this.state.optionList;
     optList.push(inputOptionStr);
     this.setState({
       optionList: optList
@@ -52,8 +52,8 @@ class Quiz extends Component {
   }
 
   onSelectQuizType() {
-    var quizType = document.getElementById('id_quizType').value;
-    var singleType = this.questionTypeEnum.SINGLE;
+    let quizType = document.getElementById('id_quizType').value;
+    let singleType = this.questionTypeEnum.SINGLE;
     if(quizType === 'single choice'){
       singleType = this.questionTypeEnum.SINGLE;
     } else {
@@ -66,15 +66,15 @@ class Quiz extends Component {
   }
 
   clearAnswer() {
-    for (var i = 0 ; i < this.state.optionList.length; i++) {
-      var selectButtonId = "id_select_" + i;
-      var ele=document.getElementById(selectButtonId);
+    for (let i = 0 ; i < this.state.optionList.length; i++) {
+      let selectButtonId = "id_select_" + i;
+      let ele=document.getElementById(selectButtonId);
       ele.checked=false;
     }
   }
 
   onDelOption(id) {
-    var optList = this.state.optionList;
+    let optList = this.state.optionList;
     if ((!Number.isInteger(id)) || (id < 0) || (id >= optList.length)) {
       alert("Can't find this option!!!");
       return;
@@ -88,12 +88,12 @@ class Quiz extends Component {
   }
 
   onDelQuiz(id) {
-    var quizList = this.state.allQuizList;
+    let quizList = this.state.allQuizList;
     if ((!Number.isInteger(id)) || (id < 0) || (id >= quizList.length)) {
       alert("Can't find this quiz!!!");
       return;
     }
-    var res = window.confirm("did you want delete " + quizList[id].question);
+    let res = window.confirm("did you want delete " + quizList[id].question);
     if(true === res){
       this.delQuizFromServer(quizList[id]._id);
       this.onGetQuiz();
@@ -101,7 +101,7 @@ class Quiz extends Component {
   }
 
   onModifyQuiz(id) {
-    var quizList = this.state.allQuizList;
+    let quizList = this.state.allQuizList;
     if ((!Number.isInteger(id)) || (id < 0) || (id >= quizList.length)) {
       alert("Can't find this quiz!!!");
       return;
@@ -112,11 +112,11 @@ class Quiz extends Component {
   }
 
   setQuizArea(quiz) {
-    var course = document.getElementById('id_course');
+    let course = document.getElementById('id_course');
     course.value = quiz.course;
-    var author = document.getElementById('id_author');
+    let author = document.getElementById('id_author');
     author.value = quiz.author;
-    var question = document.getElementById('id_question');
+    let question = document.getElementById('id_question');
     question.value = quiz.question;
     if(quiz.quizType === this.questionTypeEnum.SINGLE){
       document.getElementById("id_quizType").selectedIndex = 0;
@@ -132,15 +132,15 @@ class Quiz extends Component {
   }
 
   clearQuizArea() {
-    var course = document.getElementById('id_course');
+    let course = document.getElementById('id_course');
     course.value = "";
-    var author = document.getElementById('id_author');
+    let author = document.getElementById('id_author');
     author.value = "";
-    var question = document.getElementById('id_question');
+    let question = document.getElementById('id_question');
     question.value = "";
     document.getElementById("id_quizType").selectedIndex = 0;
-    for(var i = 0; i < this.state.optionList.length; i++){
-      var selectButtonId = "id_select_" + i;
+    for(let i = 0; i < this.state.optionList.length; i++){
+      let selectButtonId = "id_select_" + i;
       document.getElementById(selectButtonId).checked=false;
     }
     this.setState({
@@ -177,9 +177,9 @@ class Quiz extends Component {
   }
 
   getAnswerList() {
-    var answerList = [];
-    for(var i = 0; i < this.state.optionList.length; i++) {
-      var eleId = "id_select_" + i;
+    let answerList = [];
+    for(let i = 0; i < this.state.optionList.length; i++) {
+      let eleId = "id_select_" + i;
       if(this.state.singleSelect === this.questionTypeEnum.SINGLE){
         if(document.getElementById(eleId).checked){
           answerList.push(this.state.optionList[i]);
@@ -195,7 +195,7 @@ class Quiz extends Component {
   }
 
   submitQuizToServer(submitQuiz) {
-    var that = this;
+    let that = this;
     fetch('/submitQuiz', {
       method: "POST",
       headers: new Headers({
@@ -230,7 +230,7 @@ class Quiz extends Component {
 
   onSubmit() {
 
-    var submitQuiz = {
+    let submitQuiz = {
       _id:0,
       course:"",
       author:"",
@@ -256,7 +256,7 @@ class Quiz extends Component {
   }
 
   getQuizFromServer(pattern) {
-    var that = this;
+    let that = this;
     fetch('/getQuiz', {
       method: "POST",
       headers: new Headers({
@@ -271,7 +271,7 @@ class Quiz extends Component {
     .then(function(response){
       console.info("get quiz response : ", (response));
       if(response.state === true){
-        var quizList = response.data;
+        let quizList = response.data;
         console.info("get quiz response : ", response.data);
         that.setState({
           allQuizList: quizList
@@ -281,11 +281,11 @@ class Quiz extends Component {
   }
 
   onGetQuiz() {
-    var courseFilter = document.getElementById('id_course_filter').value;
-    var authorFilter = document.getElementById('id_author_filter').value;
-    var questionFilter = document.getElementById('id_question_filter').value;
+    let courseFilter = document.getElementById('id_course_filter').value;
+    let authorFilter = document.getElementById('id_author_filter').value;
+    let questionFilter = document.getElementById('id_question_filter').value;
     console.info("in onGetQuiz : " + courseFilter + authorFilter + questionFilter);
-    var pattern = {
+    let pattern = {
       _id:0,
       course:courseFilter,
       author:authorFilter,
@@ -319,21 +319,21 @@ class Quiz extends Component {
   }
 
   generateOptHtml() {
-    var optList = this.state.optionList;
+    let optList = this.state.optionList;
     console.info("generateOptHtml : ", optList);
-    var singleType = this.state.singleSelect;
-    var generateHtml = [];
-    for (var i = 0 ; i < optList.length; i++) {
-      var tId = "id_options_" + i;
-      var selectButtonId = "id_select_" + i;
-      var selectButton = null;
+    let singleType = this.state.singleSelect;
+    let generateHtml = [];
+    for (let i = 0 ; i < optList.length; i++) {
+      let tId = "id_options_" + i;
+      let selectButtonId = "id_select_" + i;
+      let selectButton = null;
       if (singleType === this.questionTypeEnum.SINGLE){
         selectButton = <InputGroupAddon> <Input addon type="radio"  name="correctAnswer" id={selectButtonId} /> </InputGroupAddon>
       } else {
         selectButton =<InputGroupAddon> <Input addon type="checkbox" name="correctAnswer" id={selectButtonId}/> </InputGroupAddon>
       }
 
-      var oneOptHtml =<FormGroup row> <InputGroup>
+      let oneOptHtml =<FormGroup row> <InputGroup>
         {selectButton}
         <Input type="textarea" id={tId} value={optList[i]}/>
         <InputGroupButton><Button onClick={this.onDelOption.bind(this, i)}>Delete</Button></InputGroupButton>
@@ -344,15 +344,15 @@ class Quiz extends Component {
   }
 
   generateQuizListHtml() {
-    var quizList = this.state.allQuizList;
+    let quizList = this.state.allQuizList;
     console.info("generateQuizListHtml : ", quizList);
-    var generateHtml = [];
-    for (var i = 0; i < quizList.length; i++) {
-      var tId = "id_quiz_" + i;
-      var modify_button = <InputGroupButton><Button onClick={this.onModifyQuiz.bind(this, i)}>Modify</Button></InputGroupButton>
-      var delete_button = <InputGroupButton><Button onClick={this.onDelQuiz.bind(this, i)}>Delete</Button></InputGroupButton>
-      var showValue = quizList[i].question;
-      var oneQuizHtml = <FormGroup row> <InputGroup>
+    let generateHtml = [];
+    for (let i = 0; i < quizList.length; i++) {
+      let tId = "id_quiz_" + i;
+      let modify_button = <InputGroupButton><Button onClick={this.onModifyQuiz.bind(this, i)}>Modify</Button></InputGroupButton>
+      let delete_button = <InputGroupButton><Button onClick={this.onDelQuiz.bind(this, i)}>Delete</Button></InputGroupButton>
+      let showValue = quizList[i].question;
+      let oneQuizHtml = <FormGroup row> <InputGroup>
         <Input type="textarea" id={tId} value={showValue}/>
         {modify_button}
         {delete_button}
@@ -366,8 +366,8 @@ class Quiz extends Component {
 
   render() {
     console.info("come to render");
-    var optListHtml = this.generateOptHtml();
-    var quizListHtml = this.generateQuizListHtml();
+    let optListHtml = this.generateOptHtml();
+    let quizListHtml = this.generateQuizListHtml();
     return (
       <Container>
         <Row>

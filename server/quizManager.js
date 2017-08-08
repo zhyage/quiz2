@@ -28,7 +28,7 @@ let addNewQuiz = function(submitQuiz){
       });
     }
   });
-}
+};
 
 let delQuiz = function(id){
   return new Promise(function(resolve, reject){
@@ -74,7 +74,7 @@ let modifyQuiz = function(submitQuiz){
       }
     })
   })
-}
+};
 
 
 let matchQuiz = function(quiz, pattern){
@@ -107,7 +107,7 @@ let matchQuiz = function(quiz, pattern){
   }
   console.info("match success");
   return true;
-}
+};
 
 let getQuiz = function(filter) {
   console.info("come into getQuiz");
@@ -125,10 +125,26 @@ let getQuiz = function(filter) {
       }
     });
   });
-}
+};
+
+let getQuizById = function (id) {
+  console.info("come into getQuizById : ", id);
+  return new Promise(function (resolve, reject) {
+    quizModel.Quiz.findById(id, function (err, quiz) {
+      if(err){
+        console.info("findById err :", err);
+        reject(err);
+      }else{
+        console.info("findById quiz : ", quiz);
+        resolve(quiz);
+      }
+    });
+  });
+};
 
 
 module.exports.addNewQuiz = addNewQuiz;
 module.exports.modifyQuiz = modifyQuiz;
 module.exports.delQuiz = delQuiz;
-module.exports.getQuiz = getQuiz
+module.exports.getQuiz = getQuiz;
+module.exports.getQuizById = getQuizById;
