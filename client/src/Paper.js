@@ -215,7 +215,28 @@ class Paper extends Component {
   }
 
   onModifyPaper(id){
-    console.info("onModifyPaper");
+    let paperList = this.state.allPaperList;
+    if ((!Number.isInteger(id)) || (id < 0) || (id >= paperList.length)) {
+      alert("Can't find this paper!!!");
+      return;
+    }
+    console.info("now to modify paper : " + paperList[id]);
+    this.onClear();
+    this.setPaperArea(paperList[id]);
+  }
+
+  setPaperArea(paper) {
+    let name = document.getElementById('id_paperName');
+    name.value = paper.paperName;
+    let author = document.getElementById('id_paperAuthor');
+    author.value = paper.author;
+
+    this.getQuizListByPaperId(paper._id);
+
+    this.setState({
+      paperId: paper._id
+    })
+
   }
 
   onAddPaperToPaper(id){
@@ -244,8 +265,9 @@ class Paper extends Component {
         if(response.state === true){
           let getQuizList = response.data;
           console.info("get getQuizListByPaperId response : ", response.data);
+          let selectQuizList = that.state.pickedQuizList.concat(getQuizList);
           that.setState({
-            pickedQuizList: getQuizList
+            pickedQuizList: selectQuizList
           })
         }
       })
