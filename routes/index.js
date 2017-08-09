@@ -24,7 +24,7 @@ router.post('/submitQuiz', function(req, res, next){
   if(0 == submitQuiz._id){
   quizManager.addNewQuiz(submitQuiz).then(function(){
     res.setHeader('Content-Type', 'application/json');
-    res.send(buildRes(true, "", ""));
+    res.send(buildRes(true, "add new quiz success!", ""));
   })
   .catch(function(err){
     console.info("come into submitQuiz error catch");
@@ -34,7 +34,7 @@ router.post('/submitQuiz', function(req, res, next){
 }else{
   quizManager.modifyQuiz(submitQuiz).then(function(){
     res.setHeader('Content-Type', 'application/json');
-    res.send(buildRes(true, "", ""));
+    res.send(buildRes(true, "modify quiz success", ""));
   })
   .catch(function(err){
     console.info("come into submitQuiz error catch : ", err);
@@ -83,7 +83,7 @@ router.post('/submitPaper', function(req, res, next){
     console.info("add new paper");
     examPaper.addNewPaper(submitPaper).then(function(){
       res.setHeader('Content-Type', 'application/json');
-      res.send(buildRes(true, "", ""));
+      res.send(buildRes(true, "add new paper success", ""));
     })
       .catch(function(err){
         console.info("come into submitPaper error catch");
@@ -92,15 +92,15 @@ router.post('/submitPaper', function(req, res, next){
       });
   }else{
     console.info("modify a paper");
-    // quizManager.modifyQuiz(submitQuiz).then(function(){
-    //   res.setHeader('Content-Type', 'application/json');
-    //   res.send(buildRes(true, "", ""));
-    // })
-    //   .catch(function(err){
-    //     console.info("come into submitQuiz error catch : ", err);
-    //     res.setHeader('Content-Type', 'application/json');
-    //     res.send(buildRes(false, "error to submit quiz", ""));
-    //   })
+    examPaper.modifyPaper(submitPaper).then(function(){
+      res.setHeader('Content-Type', 'application/json');
+      res.send(buildRes(true, "modify paper success", ""));
+    })
+      .catch(function(err){
+        console.info("come into submitPaper error catch : ", err);
+        res.setHeader('Content-Type', 'application/json');
+        res.send(buildRes(false, "error to submit paper", ""));
+      })
   }
 });
 

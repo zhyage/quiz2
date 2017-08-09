@@ -204,13 +204,19 @@ class Quiz extends Component {
       body: JSON.stringify(submitQuiz)
     })
     .then(function (res) {
-      console.info("submit res : ", res);
+      //console.info("submit res : ", res);
+      return res.json();
     })
-    .then(function(returnData){
-      console.info("submit returnData : ", returnData);
+    .then(function(response){
+      console.info("get submit quiz response : ", response);
+      alert(response.msg);
+      if(response.state === true){
+        that.onClear();
+      }
       that.onGetQuiz();
     })
   }
+
 
   delQuizFromServer(id) {
     fetch('/delQuiz', {

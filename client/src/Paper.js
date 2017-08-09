@@ -111,8 +111,13 @@ class Paper extends Component {
 
 
   onClear() {
+    let paperName = document.getElementById('id_paperName');
+    paperName.value = "";
+    let author = document.getElementById('id_paperAuthor');
+    author.value = "";
     this.setState({
-      pickedQuizList:[]
+      pickedQuizList:[],
+      paperId:0
     });
 
   }
@@ -156,10 +161,15 @@ class Paper extends Component {
       body: JSON.stringify(submitPaper)
     })
       .then(function (res) {
-        console.info("submitPaper res : ", res);
+        return res.json();
       })
-      .then(function(returnData){
-        console.info("submitPaper returnData : ", returnData);
+      .then(function(response){
+        console.info("get submitPaper response : ", response);
+        alert(response.msg);
+        if(response.state === true){
+          that.onClear();
+        }
+        that.onGetPaper();
         //that.onGetQuiz();
       })
   }
@@ -198,7 +208,7 @@ class Paper extends Component {
       console.log("ready to submit");
       this.submitPaperToServer(submitPaper)
     }
-    this.onGetPaper();
+    //this.onGetPaper();
   }
 
   onGetPaper() {

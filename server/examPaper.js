@@ -32,6 +32,36 @@ let addNewPaper = function(submitPaper){
   });
 };
 
+let modifyPaper = function(submitPaper){
+  console.info("come into modifyPaper : ", submitPaper)
+  return new Promise(function(resolve, reject){
+    examinationPaperModel.examinationPaper.findById(submitPaper._id, function(err, findPaper){
+      if(err || null == findPaper){
+        console.info("error to find paper : ", submitPaper._id);
+        reject(err)
+      }else{
+        findPaper.paperName = submitPaper.paperName;
+        findPaper.author = submitPaper.author;
+        findPaper.quizList = submitPaper.quizList;
+
+
+        if(!findPaper.verifyPaper()){
+          reject("error to verifyPaper : ", findPaper._id);
+        }
+
+        findPaper.save(function(err){
+          if(err){
+            console.info("error to save : ", findPaper._id);
+            reject(err)
+          }else{
+            resolve();
+          }
+        })
+      }
+    })
+  })
+};
+
 let matchPaper = function(paper, pattern){
   if(pattern.paperName.length > 0){
     if(!paper.paperName.includes(pattern.paperName)){
@@ -126,6 +156,7 @@ let getQuizListByPaperId = function (id) {
 module.exports.addNewPaper = addNewPaper;
 module.exports.getPaper = getPaper;
 module.exports.delPaper = delPaper;
+module.exports.modifyPaper = modifyPaper;
 module.exports.getQuizListByPaperId = getQuizListByPaperId;
 
 // let addNewExamPaper = function(paperName){
