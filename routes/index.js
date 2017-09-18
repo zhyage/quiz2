@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var quizManager = require('../server/quizManager');
 var examPaper = require('../server/examPaper');
+var examinationManager = require('../server/examinationManager');
 
 
 var buildRes = function(state, msg, data){
@@ -149,6 +150,95 @@ router.post('/getQuizByPaperId', function(req, res, next){
       res.send(buildRes(false, "error to get getQuizByPaperId", ""));
     })
 });
+
+/*************************************************************/
+router.post('/submitExamination', function(req, res, next){
+  console.info("submitExamination req.body : ", req.body);
+  var submitExamination = req.body;
+  if(0 == submitExamination._id){
+    console.info("add new examination");
+    examinationManager.addExamination(submitExamination).then(function(){
+      res.setHeader('Content-Type', 'application/json');
+      res.send(buildRes(true, "add new examination success", ""));
+    })
+      .catch(function(err){
+        console.info("come into submitExamination error catch");
+        res.setHeader('Content-Type', 'application/json');
+        res.send(buildRes(false, "error to submit examination", ""));
+      });
+  }else{
+    // console.info("modify a examination");
+    // examPaper.modifyPaper(submitPaper).then(function(){
+    //   res.setHeader('Content-Type', 'application/json');
+    //   res.send(buildRes(true, "modify paper success", ""));
+    // })
+    //   .catch(function(err){
+    //     console.info("come into submitPaper error catch : ", err);
+    //     res.setHeader('Content-Type', 'application/json');
+    //     res.send(buildRes(false, "error to submit paper", ""));
+    //   })
+  }
+});
+
+router.post('/getExamination', function(req, res, next){
+  console.info("getExamination req.body: ", req.body);
+  var filter = req.body;
+  examinationManager.getExamination(filter).then(function(returnData){
+    console.info("return data : ", returnData);
+    res.setHeader('Content-Type', 'application/json');
+    res.send(buildRes(true, "", returnData));
+  })
+    .catch(function(err){
+      console.info("come into getExamination error catch");
+      res.setHeader('Content-Type', 'application/json');
+      res.send(buildRes(false, "error to get getExamination", ""));
+    })
+});
+
+router.post('/triggerExamination', function(req, res, next){
+  console.info("triggerExamination req.body: ", req.body);
+  var info = req.body;
+  examinationManager.triggerExamination(info).then(function(returnData){
+    console.info("return data : ", returnData);
+    res.setHeader('Content-Type', 'application/json');
+    res.send(buildRes(true, "", returnData));
+  })
+    .catch(function(err){
+      console.info("come into triggerExamination error catch");
+      res.setHeader('Content-Type', 'application/json');
+      res.send(buildRes(false, "error to triggerExamination", ""));
+    })
+});
+
+router.post('/delExamination', function(req, res, next){
+  console.info("delExamination req.body: ", req.body);
+  var deleteId = req.body;
+  console.info("deleteId : ", deleteId.deleteId);
+  examinationManager.delExamination(deleteId.deleteId).then(function(){
+    res.setHeader('Content-Type', 'application/json');
+    res.send(buildRes(true, "", ""));
+  })
+    .catch(function(err){
+      console.info("come into del error catch");
+      res.setHeader('Content-Type', 'application/json');
+      res.send(buildRes(false, "error to delete examination", ""));
+    })
+});
+
+router.post('/getExaminationDetailByExaminationId', function(req, res, next){
+  console.info("getExaminationDetailByExaminationId req.body: ", req.body);
+  var examinationId = req.body;
+  examinationManager.getExaminationById(examinationId.examinationId).then(function(returnData){
+    res.setHeader('Content-Type', 'application/json');
+    res.send(buildRes(true, "", returnData));
+  })
+    .catch(function (err) {
+      console.info("come into getExaminationDetailByExaminationId error catch");
+      res.setHeader('Content-Type', 'application/json');
+      res.send(buildRes(false, "error to getExaminationDetailByExaminationId", ""));
+    })
+});
+
 
 
 module.exports = router;

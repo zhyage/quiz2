@@ -20,7 +20,7 @@ let Schema = mongoose.Schema;
 let examinationPaperSchema = new Schema ({
     paperName: {type: String, required: true},
     author:{type:String, required:true},
-    quizList: [ {quiz: {type: quizModel.quizSchema}} ],
+    quizList: [  quizModel.quizSchema ],
     created_at: Date,
     updated_at: Date
 });
