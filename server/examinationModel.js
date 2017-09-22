@@ -25,6 +25,18 @@ conn.once('open', function(){
 
 let Schema = mongoose.Schema;
 
+let answerSchema = new Schema ({
+  questionId:{type: Number},
+  answerId:[{type: Number}]
+}, { _id: false });
+
+let attendersSchema = new Schema ({
+  userName:{type:String, required:true},
+  userId:{type:String, required:true},
+  answerList:[answerSchema]
+  // answerList:[{questionId:number, answer:[{answerId:number}]}]
+}, { _id: false });
+
 let examinationSchema = new Schema ({
   examinationName: {type: String, required: true},
   examinationAuthor: {type: String, required: true},
@@ -32,7 +44,7 @@ let examinationSchema = new Schema ({
   quizList: [ quizModel.quizSchema ],
   disorderQuizs: {type: Boolean, required: true, default: false},
   disorderOptions: {type: Boolean, required: true, default: false},
-  attends: [],
+  attends: [attendersSchema],
   created_at: Date,
   updated_at: Date
 });
@@ -48,8 +60,14 @@ examinationSchema.methods.verifyExamination = function(){
 };
 
 let examination = conn.model('examination', examinationSchema);
+let attenders = conn.model('attenders', attendersSchema);
+let answer = conn.model('answer', answerSchema);
 
 module.exports.examination = examination;
 module.exports.examinationSchema = examinationSchema;
 module.exports.examinationStateEnum = examinationStateEnum;
+module.exports.attendersSchema = attendersSchema;
+module.exports.answerSchema = answerSchema;
+module.exports.attenders = attenders;
+module.exports.answer = answer;
 // module.exports.disorderStatusEnum = disorderStatusEnum;

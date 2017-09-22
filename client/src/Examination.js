@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import qrcode from 'qrcode-generator';
 import createReactClass from 'create-react-class';
 import Popup from 'react-popup';
+import QRCode from 'qrcode.react';
 import 'bootstrap/dist/css/bootstrap.css';
 import {
   Button,
@@ -27,22 +27,22 @@ class Examination extends Component {
 
 
   constructor(props) {
-    super(props);
+  super(props);
 
 
-    this.state = {
-      examinationId: 0,
-      // disorderQuizs: false,
-      // disorderOptions: false,
-      pickedQuizList: [],
-      allPaperList: [],
-      allExaminationList:[],
-      showExaminationDetail: {examinationId: -1, action:false}
-    };
-
-    this.examinationDetail = {};
-
+  this.state = {
+    examinationId: 0,
+    // disorderQuizs: false,
+    // disorderOptions: false,
+    pickedQuizList: [],
+    allPaperList: [],
+    allExaminationList:[],
+    showExaminationDetail: {examinationId: -1, action:false}
   };
+
+  this.examinationDetail = {};
+
+};
 
   componentDidMount() {
     console.info("come into componentDidMount");
@@ -240,8 +240,19 @@ class Examination extends Component {
   }
 
 
-  onGetExaminationDetail(id) {
+  onGetExaminationDetail2(id) {
     console.info("come into onGetExaminationDetail, id : ", id);
+    let examinationList = this.state.allExaminationList;
+    if ((!Number.isInteger(id)) || (id < 0) || (id >= examinationList.length)) {
+      alert("Can't find this examination!!!");
+      return;
+    }
+    var path='/RQCode/' +  examinationList[id]._id;
+    window.open(path);
+  }
+
+  onGetExaminationDetail(id) {
+    console.info("come into onGetExaminationDetail2, id : ", id);
     let examinationList = this.state.allExaminationList;
     if ((!Number.isInteger(id)) || (id < 0) || (id >= examinationList.length)) {
       alert("Can't find this examination!!!");
@@ -431,6 +442,8 @@ class Examination extends Component {
       let tId = "id_examination_" + i;
       let delete_button = <InputGroupButton><Button onClick={this.onDelExamination.bind(this, i)}>Delete</Button></InputGroupButton>
       let get_detail_button = <InputGroupButton><Button onClick={this.onGetExaminationDetail.bind(this, i)}>Get detail</Button></InputGroupButton>
+      let get_detail_button2 =  <InputGroupButton><Button onClick={this.onGetExaminationDetail2.bind(this, i)}>Get detail2</Button></InputGroupButton>
+
       if (examinationList[i].examinationState === this.examinationStateEnum.READY){
         examinationStateHtml = <InputGroupButton color="warning">ready</InputGroupButton>
         startExaminationButtonHtml =  <InputGroupButton><Button onClick={this.onStartExamination.bind(this, i)}>Start</Button></InputGroupButton>
@@ -449,6 +462,7 @@ class Examination extends Component {
         {startExaminationButtonHtml}
 
         {get_detail_button}
+        {get_detail_button2}
 
         {/*{modify_button}*/}
         {/*{delete_button}*/}
@@ -472,14 +486,6 @@ class Examination extends Component {
     }
   }
 
-  generateQrcodeHtml(){
-    var qr = qrcode(4, 'L');
-    qr.addData("Hi");
-    qr.make();
-    var code = qr.createImgTag();
-    console.info("qrcode : ", code)
-    return code ;
-  }
 
   render() {
     if(this.state.showExaminationDetail.action) {
@@ -487,10 +493,6 @@ class Examination extends Component {
       this.getExaminationDetailByExaminationId(this.state.showExaminationDetail.examinationId);
       return (
         <Container>
-          <Row>
-            {/*{this.generateQrcodeHtml()}*/}
-            <img src="data:image/gif;base64,R0lGODdhUgBSAIAAAAAAAP///ywAAAAAUgBSAAAC/4yPqcvtD6OctNqLs968+w+G4kiW5mkC6sqyhsq4ATyvUIvbU56/QKyjyRw8HIUG9CGKv4Ow6XsSoRHkQuosLptWmVXxfTy9XJ2ytuVtz0b0rkyOUrHyNhsepN7w2Hb47ldWJ/g2CJiXVBN4SFfFRyh3BvbY9yjpaOgWqZkw1nKX+dcgyqjXiahoSsq5N5UJVBm2ujrJVAnqdptrS3vKi6sbTNlzEpc61YtSSzh0ZTbSbJe1Ccs8N3z0LH2IbL2W2tzqe13NPao1XTj+vWxeLZ18ukk2ixqefp89n1cfa+peocsnefiuqckiKp8Yg88uNWKS5t+xgOQmThrU6Bu8gf8SBFIjeDChJYQNFzrExqrgopTbTHLyZOwiOHuqOFKEyfAgLoyQLN4cyTNaz5AMs7UU6K9bRKFGbZ5Meg6pzXg8Ndbs580Z1XFMWZaMuHPdBalki+7CGmhr2aVmPXVLKzHR07harYn8qC8d3oVQZSoUd4ltWIgky1FkxzVrULPtMvzaVTVlKbCObQEjdncm5aaZZfrF3HPvHoWdQYIO7NMCYbYb58aU/EYnSdkPT+vdcG/lX5+yPeQe6DZqzq+xh4civm9xy9HGNacWi3M1tJLGSF/FQ+J3X4KUdy+Tjro7yuh036FD3Jh8qa3hVdJkra1mWMDOjrueKh+yOt00V35gB+2dadX1B5xEjy13jn0J1jdTPAgm4h+Dnz2YWF4RkueRV9mNlKF0GcHGQT3mBCeXaRqIeJZddGXGXmJESaWUfoSpxQt2hQl3GVHK7Mhjjz7+CGSQQg5JZJFGHokkAgUAADs=" width="82" height="82"/>
-          </Row>
           <Row>
             {this.generateExaminationDetailHtml()}
           </Row>

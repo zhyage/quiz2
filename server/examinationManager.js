@@ -118,6 +118,44 @@ let triggerExamination = function(info) {
   })
 };
 
+let addUserIntoExamination = function(userInfo) {
+  console.info("come into addUserIntoExamination");
+  console.info(userInfo);
+  return new Promise(function(resolve, reject){
+    examinationModel.examination.findById(userInfo.examinationId, function(err, findExamination) {
+      if (err || null == findExamination) {
+        console.info("error to find examination : ", userInfo.examinationId);
+        retject(err);
+      } else {
+        let attendersList = findExamination.attends;
+        let existAttender = _.find(attendersList, function (attender) {
+          console.info(attender);
+          return (attender.userName === userInfo.userName && attender.userId === userInfo.userId);
+        })
+        console.info("existAttender : ", existAttender);
+        if (existAttender) {
+          console.info("user already exist");
+          resolve();
+        } else {
+          let newAttender = new examinationModel.attenders({
+            userName:userInfo.userName,
+            userId:userInfo.userId
+          });
+          findExamination.attends.push(newAttender);
+          findExamination.save(function(err){
+            if(err){
+              console.info("save err : ", err);
+              reject(err)
+            }else{
+              resolve();
+            }
+          });
+        }
+      }
+    });
+  });
+}
+
 let delExamination = function(id){
   return new Promise(function(resolve, reject){
     examinationModel.examination.findByIdAndRemove(id, function(err){
@@ -139,6 +177,7 @@ module.exports.getExamination = getExamination;
 module.exports.triggerExamination = triggerExamination;
 module.exports.delExamination = delExamination;
 module.exports.getExaminationById = getExaminationById;
+module.exports.addUserIntoExamination = addUserIntoExamination;
 
 
 

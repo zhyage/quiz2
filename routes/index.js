@@ -239,6 +239,20 @@ router.post('/getExaminationDetailByExaminationId', function(req, res, next){
     })
 });
 
+/*******************************************************************************************/
+router.post('/joinExamination', function(req, res, next) {
+  console.info("joinExamination req.body: ", req.body);
+  var userInfo = req.body;
+  examinationManager.addUserIntoExamination(userInfo).then(function(returnData){
+    res.setHeader('Content-Type', 'application/json');
+    res.send(buildRes(true, "", returnData));
+  })
+    .catch(function (err) {
+      console.info("come into joinExamination error catch");
+      res.setHeader('Content-Type', 'application/json');
+      res.send(buildRes(false, "error to joinExamination", ""));
+    })
+});
 
 
 module.exports = router;

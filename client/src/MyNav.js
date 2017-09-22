@@ -50,14 +50,14 @@ export default class MyNav extends React.Component {
               examination manager
             </NavLink>
           </NavItem>
-          <NavItem>
-            <NavLink
-              className={classnames({ active: this.state.activeTab === '4' })}
-              onClick={() => { this.toggle('4'); }}
-            >
-              examination details
-            </NavLink>
-          </NavItem>
+          {/*<NavItem>*/}
+            {/*<NavLink*/}
+              {/*className={classnames({ active: this.state.activeTab === '4' })}*/}
+              {/*onClick={() => { this.toggle('4'); }}*/}
+            {/*>*/}
+              {/*examination details*/}
+            {/*</NavLink>*/}
+          {/*</NavItem>*/}
         </Nav>
         <TabContent activeTab={this.state.activeTab}>
           <TabPane tabId="1">
@@ -81,13 +81,13 @@ export default class MyNav extends React.Component {
               </Col>
             </Row>
           </TabPane>
-          <TabPane tabId="4">
-            <Row>
-              <Col sm="12">
-                <Examination examination />
-              </Col>
-            </Row>
-          </TabPane>
+          {/*<TabPane tabId="4">*/}
+            {/*<Row>*/}
+              {/*<Col sm="12">*/}
+                {/*<Examination examination />*/}
+              {/*</Col>*/}
+            {/*</Row>*/}
+          {/*</TabPane>*/}
         </TabContent>
       </div>
     );
