@@ -104,6 +104,10 @@ class Examination extends Component {
           let examinatinDetail = response.data;
           console.info("examinatinDetail : ", examinatinDetail);
           that.examinationDetail = examinatinDetail;
+          let examinationList = that.state.allExaminationList;
+           that.setState({
+             showExaminationDetail:{examinationId: id, action:true}
+           });
         }
       })
   }
@@ -258,9 +262,12 @@ class Examination extends Component {
       alert("Can't find this examination!!!");
       return;
     }
-    this.setState({
-      showExaminationDetail:{examinationId: examinationList[id]._id, action:true}
-    });
+    this.getExaminationDetailByExaminationId(examinationList[id]._id);
+
+
+    // this.setState({
+    //   showExaminationDetail:{examinationId: examinationList[id]._id, action:true}
+    // });
 
   }
 
@@ -464,9 +471,6 @@ class Examination extends Component {
         {get_detail_button}
         {get_detail_button2}
 
-        {/*{modify_button}*/}
-        {/*{delete_button}*/}
-        {/*{add_button}*/}
       </InputGroup> </FormGroup>
       generateHtml.push(oneExaminationHtml)
     }
@@ -476,26 +480,60 @@ class Examination extends Component {
   }
 
   generateExaminationDetailHtml(){
+    let generateHtml = [];
+    let examinationStateHtml = null;
     console.info("this.examinationDetail : ", this.examinationDetail);
     if(this.examinationDetail.examinationState == this.examinationStateEnum.READY){
-      return <h1>Examination State : Ready</h1>
+      examinationStateHtml =  <Row><h1>Examination State : Ready</h1></Row>
     }else if (this.examinationDetail.examinationState == this.examinationStateEnum.ONGOING){
-      return <h1>Examination State : Ongoing</h1>
+      examinationStateHtml = <Row><h1>Examination State : Ongoing</h1></Row>
     }else {
-      return <h1>Examination State : Finished</h1>
+      examinationStateHtml =  <Row><h1>Examination State : Finished</h1></Row>
     }
+    generateHtml.push(examinationStateHtml);
+    let attenders = this.examinationDetail.attends;
+    let totalAttendersHtml = <Row><h1>Total attender : {attenders.length}</h1></Row>
+    generateHtml.push(totalAttendersHtml);
+    for(let i = 0; i < attenders.length; i++){
+      let userName = attenders[i].userName;
+      let attenderHtml = <Row><h2>attender : {userName}</h2></Row>
+      generateHtml.push(attenderHtml);
+      let totalQuizs = attenders[i].renderQuiz.length;
+      let finishedQuiz = 0;
+      let passedQuiz = totalQuizs;
+      for(let j = 0; j < totalQuizs; j++){
+        let correctAnswerList = attenders[i].renderQuiz[j].correctAnswers;
+        let commitAnswerList = attenders[i].renderQuiz[j].commitAnswers;
+        console.info("correctAnswerList : ", correctAnswerList);
+        console.info("commitAnswerList : ", commitAnswerList);
+        for(let k = 0; k < commitAnswerList.length; k++){
+          if(commitAnswerList[k] === true){
+            finishedQuiz += 1;
+            break;
+          }
+        }
+        for(let l = 0; l < commitAnswerList.length; l++){
+          if(commitAnswerList[l] != correctAnswerList[l]){
+            passedQuiz -= 1;
+            break;
+          }
+        }
+      }
+      let finishedHtml = <Row><h3> &nbsp; finished : {finishedQuiz}/{totalQuizs}</h3></Row>
+      generateHtml.push(finishedHtml);
+      let passedQuizHtml = <Row><h3> &nbsp; passed : {passedQuiz}/{totalQuizs}</h3></Row>
+      generateHtml.push((passedQuizHtml))
+    }
+    return generateHtml;
   }
 
 
   render() {
     if(this.state.showExaminationDetail.action) {
       console.info("come into showExaminationDetail render");
-      this.getExaminationDetailByExaminationId(this.state.showExaminationDetail.examinationId);
       return (
         <Container>
-          <Row>
             {this.generateExaminationDetailHtml()}
-          </Row>
           <Row>
             <Button onClick={this.onCloseExaminationDetail.bind(this)}>Close</Button>
           </Row>

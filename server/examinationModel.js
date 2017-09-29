@@ -30,12 +30,27 @@ let answerSchema = new Schema ({
   answerId:[{type: Number}]
 }, { _id: false });
 
+let renderQuizSchema = new Schema({
+  quizId:{type:String},
+  options:[Number],
+  correctAnswers:[Boolean],
+  commitAnswers:[Boolean]
+}, {_id:false});
+
+let commitAnswerSchema = new Schema({
+  quizId:{type:String},
+  selectedAnswer:[{type:Number}]
+}, {_id:false});
+
 let attendersSchema = new Schema ({
   userName:{type:String, required:true},
   userId:{type:String, required:true},
-  answerList:[answerSchema]
-  // answerList:[{questionId:number, answer:[{answerId:number}]}]
+  renderQuiz:[renderQuizSchema]
+  // answerList:[answerSchema],
+  // commitAnswer:[commitAnswerSchema],
 }, { _id: false });
+
+
 
 let examinationSchema = new Schema ({
   examinationName: {type: String, required: true},
@@ -68,6 +83,7 @@ module.exports.examinationSchema = examinationSchema;
 module.exports.examinationStateEnum = examinationStateEnum;
 module.exports.attendersSchema = attendersSchema;
 module.exports.answerSchema = answerSchema;
+module.exports.renderQuizSchema = renderQuizSchema;
 module.exports.attenders = attenders;
 module.exports.answer = answer;
 // module.exports.disorderStatusEnum = disorderStatusEnum;

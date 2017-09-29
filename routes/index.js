@@ -254,5 +254,21 @@ router.post('/joinExamination', function(req, res, next) {
     })
 });
 
+router.post('/commitPageAnswer', function(req, res, next) {
+  console.info("commitPageAnswer req.body: ", req.body);
+  res.setHeader('Content-Type', 'application/json');
+  res.send(buildRes(true, "", ""));
+  var commitData = req.body;
+  examinationManager.commitAnswer(commitData).then(function(){
+    res.setHeader('Content-Type', 'application/json');
+    res.send(buildRes(true, "", ""));
+  })
+    .catch(function (err) {
+      console.info("come into commitPageAnswer error catch");
+      res.setHeader('Content-Type', 'application/json');
+      res.send(buildRes(false, "error to commitPageAnswer", ""));
+    })
+});
+
 
 module.exports = router;
