@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
+import MathJax from 'react-mathjax';
 import {
   Button,
   Form,
@@ -359,7 +360,8 @@ class Quiz extends Component {
       let delete_button = <InputGroupButton><Button onClick={this.onDelQuiz.bind(this, i)}>Delete</Button></InputGroupButton>
       let showValue = quizList[i].question;
       let oneQuizHtml = <FormGroup row> <InputGroup>
-        <Input type="textarea" id={tId} value={showValue}/>
+        {/*<Input type="textarea" id={tId} value={showValue}/>*/}
+        <MathJax.Context><MathJax.Node>{showValue}</MathJax.Node></MathJax.Context>
         {modify_button}
         {delete_button}
       </InputGroup> </FormGroup>
@@ -374,6 +376,7 @@ class Quiz extends Component {
     console.info("come to render");
     let optListHtml = this.generateOptHtml();
     let quizListHtml = this.generateQuizListHtml();
+
     return (
       <Container>
         <Row>

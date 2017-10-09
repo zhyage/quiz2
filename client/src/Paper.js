@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
+import MathJax from 'react-mathjax';
 import {
   Button,
   Form,
@@ -345,7 +346,8 @@ class Paper extends Component {
       let showValue = quizList[i].question;
       let oneQuizHtml = <FormGroup row> <InputGroup>
         {add_button}
-        <Input type="textarea" id={tId} value={showValue}/>
+        {/*<Input type="textarea" id={tId} value={showValue}/>*/}
+        <MathJax.Context><MathJax.Node>{showValue}</MathJax.Node></MathJax.Context>
       </InputGroup> </FormGroup>
       generateHtml.push(oneQuizHtml)
     }
@@ -362,7 +364,8 @@ class Paper extends Component {
       let del_button = <InputGroupButton><Button onClick={this.onDelPickedQuiz.bind(this, i)}>Delete</Button></InputGroupButton>
       let showValue = pickedList[i].question;
       let onePickedQuizHtml = <FormGroup row> <InputGroup>
-        <Input type="textarea" id={tId} value={showValue}/>
+        {/*<Input type="textarea" id={tId} value={showValue}/>*/}
+        <MathJax.Context><MathJax.Node>{showValue}</MathJax.Node></MathJax.Context>
           {del_button}
         </InputGroup> </FormGroup>
         generateHtml.push(onePickedQuizHtml)

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import createReactClass from 'create-react-class';
 import Popup from 'react-popup';
 import QRCode from 'qrcode.react';
+import MathJax from 'react-mathjax';
 import 'bootstrap/dist/css/bootstrap.css';
 import {
   Button,
@@ -429,7 +430,8 @@ class Examination extends Component {
       let del_button = <InputGroupButton><Button onClick={this.onDelPickedQuiz.bind(this, i)}>Delete</Button></InputGroupButton>
       let showValue = pickedList[i].question;
       let onePickedQuizHtml = <FormGroup row> <InputGroup>
-        <Input type="textarea" id={tId} value={showValue}/>
+        {/*<Input type="textarea" id={tId} value={showValue}/>*/}
+        <MathJax.Context><MathJax.Node>{showValue}</MathJax.Node></MathJax.Context>
         {del_button}
       </InputGroup> </FormGroup>
       generateHtml.push(onePickedQuizHtml)

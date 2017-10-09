@@ -3,6 +3,7 @@ import createReactClass from 'create-react-class';
 import Popup from 'react-popup';
 import QRCode from 'qrcode.react';
 import 'bootstrap/dist/css/bootstrap.css';
+import MathJax from 'react-mathjax';
 import {
   Button,
   Form,
@@ -212,7 +213,8 @@ class PerformExamination extends Component {
     let tId = "id_quiz_" + this.state.currentPage;
     let generateHtml = [];
     let questionHtml = <FormGroup row> <InputGroup>
-           <Input type="textarea" id={tId} value={quizString}/>
+           {/*<Input type="textarea" id={tId} value={quizString}/>*/}
+           <MathJax.Context><MathJax.Node>{quizString}</MathJax.Node></MathJax.Context>
          </InputGroup> </FormGroup>
     generateHtml.push(questionHtml);
     for (let i = 0 ; i < optionsList.length; i++) {
@@ -237,7 +239,8 @@ class PerformExamination extends Component {
 
       let oneOptHtml =<FormGroup row> <InputGroup>
         {selectButton}
-        <Input type="textarea" id={tId} value={optionsList[i].optionString}/>
+        {/*<Input type="textarea" id={tId} value={optionsList[i].optionString}/>*/}
+        <MathJax.Context><MathJax.Node>{optionsList[i].optionString}</MathJax.Node></MathJax.Context>
       </InputGroup> </FormGroup>
       generateHtml.push(oneOptHtml)
     }
